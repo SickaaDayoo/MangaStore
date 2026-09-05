@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cart | Manga Store</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 text-gray-900">
+
+    <!-- Navbar -->
+    <div id="navbar"></div>
+
+
+    <!-- Cart Section -->
+    <main class="max-w-7xl mx-auto px-6 py-12">
+
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold">
+                Your Cart
+            </h1>
+
+            <p class="text-gray-500 mt-2">
+                Review your selected manga before checkout.
+            </p>
+        </div>
+
+
+        <!-- Cart Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <!-- Cart Items -->
+            <div class="lg:col-span-2">
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+
+                    <!-- Cart Header -->
+                    <div class="hidden md:grid grid-cols-12 gap-4 px-6 py-4 bg-gray-50 border-b text-sm font-semibold text-gray-600">
+
+                        <div class="col-span-5">
+                            Manga
+                        </div>
+
+                        <div class="col-span-2 text-center">
+                            Price
+                        </div>
+
+                        <div class="col-span-3 text-center">
+                            Quantity
+                        </div>
+
+                        <div class="col-span-1 text-right">
+                            Total
+                        </div>
+
+                        <div class="col-span-1"></div>
+
+                    </div>
+
+
+                    <!-- Items will be inserted here -->
+                    <div id="cartItems"></div>
+
+                </div>
+
+                <!-- Continue Shopping -->
+                <div class="mt-6">
+
+                    <a
+                        href="products.html"
+                        class="inline-flex items-center gap-2 text-gray-700 hover:text-black font-semibold transition"
+                    >
+                        ← Continue Shopping
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- Order Summary -->
+            <div class="lg:col-span-1">
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sticky top-6">
+
+                    <h2 class="text-xl font-bold mb-6">
+                        Order Summary
+                    </h2>
+
+
+                    <!-- Total Items -->
+                    <div class="flex justify-between text-gray-600 mb-4">
+
+                        <span>
+                            Total Items
+                        </span>
+
+                        <span id="totalItems" class="font-semibold text-gray-900">
+                            0
+                        </span>
+
+                    </div>
+
+
+                    <!-- Subtotal -->
+                    <div class="flex justify-between text-gray-600 mb-4">
+
+                        <span>
+                            Subtotal
+                        </span>
+
+                        <span id="subtotal" class="font-semibold text-gray-900">
+                            ₱0.00
+                        </span>
+
+                    </div>
+
+
+                    <!-- Shipping -->
+                    <div class="flex justify-between text-gray-600 mb-6">
+
+                        <span>
+                            Shipping
+                        </span>
+
+                        <span class="font-semibold text-green-600">
+                            Free
+                        </span>
+
+                    </div>
+
+
+                    <!-- Divider -->
+                    <div class="border-t pt-5">
+
+                        <div class="flex justify-between items-center">
+
+                            <span class="text-lg font-bold">
+                                Total
+                            </span>
+
+                            <span
+                                id="totalPrice"
+                                class="text-2xl font-bold"
+                            >
+                                ₱0.00
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Checkout Button -->
+                    <a
+                        href="checkout.html"
+                        class="block w-full text-center mt-6 bg-gray-900 text-white py-3 rounded-lg font-semibold hover:bg-gray-700 transition"
+                    >
+                        Proceed to Checkout
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- =============================== -->
+    <!-- FOOTER -->
+    <!-- =============================== -->
+
+    <footer class="bg-gray-900 text-gray-400 mt-8">
+
+        <div
+            class="max-w-7xl mx-auto px-6 py-8
+                   flex flex-col md:flex-row
+                   justify-center items-center gap-4"
+        >
+
+            <p>
+                © 2026 Gege Manga. All rights reserved.
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+
+
+    <script>
+
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+
+        // ===============================
+        // DISPLAY CART
+        // ===============================
+
+        function displayCart() {
+
+            const cartItems = document.getElementById("cartItems");
+
+            const totalItemsElement = document.getElementById("totalItems");
+
+            const subtotalElement = document.getElementById("subtotal");
+
+            const totalPriceElement = document.getElementById("totalPrice");
+
+
+            // Empty Cart
+            if (cart.length === 0) {
+
+                cartItems.innerHTML = `
+                    <div class="py-16 px-6 text-center">
+
+                        <div class="text-5xl mb-4">
+                            🛒
+                        </div>
+
+                        <h2 class="text-xl font-bold mb-2">
+                            Your cart is empty
+                        </h2>
+
+                        <p class="text-gray-500 mb-6">
+                            Looks like you haven't added any manga yet.
+                        </p>
+
+                        <a
+                            href="products.html"
+                            class="inline-block bg-gray-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 transition"
+                        >
+                            Browse Manga
+                        </a>
+
+                    </div>
+                `;
+
+                totalItemsElement.textContent = "0";
+                subtotalElement.textContent = "₱0.00";
+                totalPriceElement.textContent = "₱0.00";
+
+                return;
+            }
+
+
+            // Calculate totals
+            let subtotal = 0;
+            let totalItems = 0;
+
+
+            // Generate cart items
+            cartItems.innerHTML = cart.map((item, index) => {
+
+                const itemTotal = item.price * item.quantity;
+
+                subtotal += itemTotal;
+
+                totalItems += item.quantity;
+
+
+                return `
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 items-center gap-4 px-6 py-5 border-b last:border-b-0">
+
+
+                        <!-- Manga Name -->
+                        <div class="md:col-span-5">
+
+                            <p class="text-xs text-gray-400 mb-1 md:hidden">
+                                Manga
+                            </p>
+
+                            <h3 class="font-semibold text-gray-900 leading-snug">
+                                ${item.name}
+                            </h3>
+
+                        </div>
+
+
+                        <!-- Price -->
+                        <div class="md:col-span-2 md:text-center">
+
+                            <p class="text-xs text-gray-400 mb-1 md:hidden">
+                                Price
+                            </p>
+
+                            <p class="text-gray-600">
+                                ₱${Number(item.price).toFixed(2)}
+                            </p>
+
+                        </div>
+
+
+                        <!-- Quantity -->
+                        <div class="md:col-span-3 flex items-center md:justify-center">
+
+                            <div>
+
+                                <p class="text-xs text-gray-400 mb-1 md:hidden">
+                                    Quantity
+                                </p>
+
+                                <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+
+                                    <button
+                                        onclick="decreaseQuantity(${index})"
+                                        class="w-9 h-9 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-lg font-semibold transition"
+                                    >
+                                        −
+                                    </button>
+
+
+                                    <span
+                                        class="w-10 h-9 flex items-center justify-center font-semibold"
+                                    >
+                                        ${item.quantity}
+                                    </span>
+
+
+                                    <button
+                                        onclick="increaseQuantity(${index})"
+                                        class="w-9 h-9 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-lg font-semibold transition"
+                                    >
+                                        +
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Total -->
+                        <div class="md:col-span-1 md:text-right">
+
+                            <p class="text-xs text-gray-400 mb-1 md:hidden">
+                                Total
+                            </p>
+
+                            <p class="font-semibold text-gray-900">
+                                ₱${itemTotal.toFixed(2)}
+                            </p>
+
+                        </div>
+
+
+                        <!-- Remove -->
+                        <div class="md:col-span-1 flex md:justify-center">
+
+                            <button
+                                onclick="removeItem(${index})"
+                                class="text-gray-400 hover:text-red-500 transition text-lg"
+                                title="Remove item"
+                            >
+                                ✕
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }).join("");
+
+
+            // Update summary
+            totalItemsElement.textContent = totalItems;
+
+            subtotalElement.textContent = `₱${subtotal.toFixed(2)}`;
+
+            totalPriceElement.textContent = `₱${subtotal.toFixed(2)}`;
+
+        }
+
+
+        // ===============================
+        // INCREASE QUANTITY
+        // ===============================
+
+        function increaseQuantity(index) {
+
+            cart[index].quantity += 1;
+
+            saveCart();
+
+        }
+
+
+        // ===============================
+        // DECREASE QUANTITY
+        // ===============================
+
+        function decreaseQuantity(index) {
+
+            if (cart[index].quantity > 1) {
+
+                cart[index].quantity -= 1;
+
+            } else {
+
+                cart.splice(index, 1);
+
+            }
+
+            saveCart();
+
+        }
+
+
+        // ===============================
+        // REMOVE ITEM
+        // ===============================
+
+        function removeItem(index) {
+
+            cart.splice(index, 1);
+
+            saveCart();
+
+        }
+
+
+        // ===============================
+        // SAVE CART
+        // ===============================
+
+        function saveCart() {
+
+            localStorage.setItem(
+                "cart",
+                JSON.stringify(cart)
+            );
+
+            displayCart();
+
+        }
+
+
+        // ===============================
+        // CHECKOUT
+        // ===============================
+
+        function checkout() {
+
+            if (cart.length === 0) {
+
+                alert("Your cart is empty.");
+
+                return;
+
+            }
+
+            alert("Checkout feature coming soon!");
+
+        }
+
+
+        // ===============================
+        // INITIAL LOAD
+        // ===============================
+
+        displayCart();
+
+    </script>
+
+</body>
+</html>
